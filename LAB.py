@@ -54,12 +54,18 @@ def eigen(matrix):
 
 
 def pca(image):
+    plt.figure()
     plt.imshow(image)
+    plt.show()
 
     image_sum = image.sum(axis = 2)
     # print(image_sum.shape)
 
     image_bw = image_sum / image_sum.max()
+
+    plt.figure()
+    plt.imshow(image_bw, cmap = 'gray')
+    plt.show()
 
     x = image_bw.astype(float)
 
@@ -80,6 +86,7 @@ def pca(image):
     k = np.argmax(cmlt_var >= 0.95) + 1
     print("Number of comp needed to cover 95% variance: ", k)
 
+    plt.figure()
     plt.plot(cmlt_var)
     plt.axhline(0.95, color = "black", linestyle = '--')
     plt.axvline(k - 1, color = "black", linestyle = '--')
