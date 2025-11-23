@@ -128,7 +128,52 @@ def pca(image):
 image_raw = imread("/Users/artemkorniienko/R_for_DATA/tiger.jpg")
 # print(image_raw.shape)
 
-pca(image_raw)
+# pca(image_raw)
+
+
+#Task 3
+
+def encrypt_message(message, key_matrix):
+
+    message_vector = np.array([ord(char) for char in message])
+
+    eigenvalues, eigenvectors = np.linalg.eig(key_matrix)
+
+    diagonalized_key_matrix = np.dot(np.dot(eigenvectors, np.diag(eigenvalues)), np.linalg.inv(eigenvectors))
+
+    encrypted_vector = np.dot(diagonalized_key_matrix, message_vector)
+
+    return encrypted_vector
+
+
+def decrypt_message(encrypted_vector, key_matrix):
+
+    eigenvalues, eigenvectors = np.linalg.eig(key_matrix)
+
+    d_inv = np.diag(1 / eigenvalues)
+
+    p_inv = np.linalg.inv(eigenvectors)
+
+    a_inv = eigenvectors @ d_inv @ p_inv
+
+    message_vector = a_inv @ encrypted_vector
+
+    message = "".join([chr(int(round(x))) for x in message_vector])
+
+    return message
+
+
+message = "Hello, World!"
+
+key_matrix = np.random.randint(0, 256, (len(message), len(message)))
+
+print("Orig message:", message)
+
+encrypted = encrypt_message(message, key_matrix)
+print("Encrypted message:", encrypted)
+
+decrypted = decrypt_message(encrypted, key_matrix)
+print("Decrypted message:", decrypted)
 
 
 
